@@ -1,3 +1,4 @@
+import { Link } from "react-router"
 
 const Home = () => {
   return (
@@ -6,6 +7,7 @@ const Home = () => {
             <div>
               welcome to the api testing tool
             </div>
+            <Link to={"/test"}></Link>
         </div>
     </div>
   )
