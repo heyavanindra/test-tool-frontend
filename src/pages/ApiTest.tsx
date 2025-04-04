@@ -13,12 +13,15 @@ const ApiTest = () => {
   const [loading, setLoading] = useState(false);
   const [apiResponse, setApiResponse] = useState<TestResultsTypes | null>(null);
   const [error, setError] = useState("");
+
   async function handleClick() {
     setLoading(true);
+    setError("");
     try {
-      const response = await axios.post<TestResultsTypes>(`${import.meta.env.VITE_API_URL}/testapi`, {
-        api: api,
-      });
+      const response = await axios.post<TestResultsTypes>(
+        `${import.meta.env.VITE_API_URL}/testapi`,
+        { api: api }
+      );
       setApiResponse(response.data);
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -28,9 +31,13 @@ const ApiTest = () => {
   }
 
   return (
-    <div className="h-screen w-full flex flex-col justify-center items-center gap-4">
+    <div className="h-screen w-full bg-gradient-to-br from-black via-gray-900 to-gray-800 flex flex-col justify-center items-center px-4 text-white">
+      <h1 className="text-3xl md:text-4xl font-bold mb-6 tracking-wide">
+        API Testing Tool
+      </h1>
+
       <input
-        className="border-black border-2 px-2 py-1 w-80"
+        className="bg-white text-black border border-gray-300 rounded-lg px-4 py-2 w-80 focus:outline-none focus:ring-2 focus:ring-amber-400 transition mb-4"
         type="text"
         placeholder="Enter API URL"
         value={api}
@@ -38,18 +45,24 @@ const ApiTest = () => {
           setApi(e.target.value);
         }}
       />
+
       <button
-        className="px-4 py-2 bg-amber-200 rounded hover:bg-amber-300 transition"
+        className="px-6 py-2 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-300 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
         onClick={handleClick}
         disabled={loading || !api}
       >
-        {loading ? "Testing..." : "Test"}
+        {loading ? "Testing..." : "Test API"}
       </button>
-      {error && <div>
-        {error}
-        </div>}
+
+      {error && (
+        <div className="mt-4 text-red-500 text-sm">
+          {error}
+        </div>
+      )}
+
       {apiResponse && (
-        <div className="mt-4 p-4 border rounded bg-gray-100 text-left">
+        <div className="mt-8 p-6 w-[22rem] bg-white text-black rounded-xl shadow-lg animate-fade-in space-y-2">
+          <h2 className="text-lg font-bold text-center mb-2">Test Result</h2>
           <p>
             <strong>Endpoint:</strong> {apiResponse.endPoint}
           </p>
